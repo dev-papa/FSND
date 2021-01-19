@@ -128,6 +128,10 @@ def create_app(test_config=None):
 
     @app.errorhandler(404)
     def not_found():
-        return {'success': True, 'data': [], 'total_count': 0}, 404
+        return {'success': False, 'message': 'not found', 'data': [], 'total_count': 0}, 404
+
+    @app.errorhandler(422)
+    def unprocessable():
+        return {'success': False, 'message': 'unprocessable'}, 422
 
     return app

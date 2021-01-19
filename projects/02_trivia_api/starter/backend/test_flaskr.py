@@ -35,6 +35,7 @@ class TriviaTestCase(unittest.TestCase):
     TODO
     Write at least one test for each test for successful operation and for expected errors.
     """
+    # Categories
     def test_get_categories(self):
         res = self.client().get('/categories')
         data = json.loads(res.data)
@@ -43,6 +44,9 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['success'])
         self.assertTrue(data['total_count'])
         self.assertTrue(len(data))
+
+    # Questions
+
 
 
 # Make the tests conveniently executable

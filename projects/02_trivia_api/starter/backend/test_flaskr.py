@@ -46,7 +46,60 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(len(data))
 
     # Questions
+    def test_get_questions(self):
+        res = self.client().get('/questions')
+        data = json.loads(res.data)
 
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['success'])
+        self.assertTrue(data['total_count'])
+        self.assertTrue(len(data))
+
+    def test_get_questions_with_pagination(self):
+        res = self.client().get('/questions?page=1')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['success'])
+        self.assertTrue(data['total_count'])
+        self.assertTrue(len(data))
+
+    def test_get_questions_with_no_page(self):
+        res = self.client().get('/questions?page=1000')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertFalse(data['success'])
+        self.assertEqual(data['total_count'], 0)
+        self.assertTrue(len(data))
+
+    def test_get_questions_with_invalid_pagination0(self):
+        res = self.client().get('/questions?page=0')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['success'])
+        self.assertTrue(data['total_count'])
+        self.assertTrue(len(data))
+
+    def test_get_questions_with_negative_pagination(self):
+        res = self.client().get('/questions?page=-1')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['success'])
+        self.assertTrue(data['total_count'])
+        self.assertTrue(len(data))
+
+
+    def test_get_questions_with_char_pagination(self):
+        res = self.client().get('/questions?page=a')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['success'])
+        self.assertTrue(data['total_count'])
+        self.assertTrue(len(data))
 
 
 # Make the tests conveniently executable

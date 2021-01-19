@@ -124,14 +124,14 @@ def create_app(test_config=None):
     '''
     @app.errorhandler(500)
     def internal_server_error(err):
-        return {'success': False, 'message': 'Internal Server Error', 'detail': err}
+        return jsonify({'success': False, 'message': err.name, 'detail': err.description}), err.code
 
     @app.errorhandler(404)
     def not_found():
-        return {'success': False, 'message': 'not found', 'data': [], 'total_count': 0}, 404
+        return jsonify({'success': False, 'message': 'not found', 'data': [], 'total_count': 0}), 404
 
     @app.errorhandler(422)
     def unprocessable():
-        return {'success': False, 'message': 'unprocessable'}, 422
+        return jsonify({'success': False, 'message': 'unprocessable'}), 422
 
     return app

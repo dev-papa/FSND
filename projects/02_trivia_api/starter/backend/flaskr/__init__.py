@@ -39,6 +39,9 @@ def create_app(test_config=None):
             categories = [category.format() for category in ret]
             cnt = len(categories)
             if cnt == 0:
+                # I don't think it's good idea to return 404 if no record found.
+                # Should return 200 as response has total_count field.
+                # And `abort` invoke `HTTP Exception` so have to catch 404 error in `except` clause again.
                 abort(404)
 
             res = ({
@@ -47,8 +50,8 @@ def create_app(test_config=None):
                 'total_count': cnt
             })
             return jsonify(res), 200
-        except Exception:
-            abort(500)
+        except Exception as err:
+            abort(err.code)
     '''
     @TODO: 
     Create an endpoint to handle GET requests for questions, 
@@ -63,8 +66,26 @@ def create_app(test_config=None):
     '''
     @app.route('/questions', methods=['GET'])
     def get_queries():
-        page = request.args.get('page', 1, type=int)
-        pass
+        try:
+            page = request.args.get('page', 1, type=int)
+            if page is None or page <= 0:
+                page = 1
+            offset_start = (page - 1) * QUESTIONS_PER_PAGE
+            ret: Question = Question.query.order_by(Question.id).offset(offset_start).limit(10).all()
+            questions = [q.format() for q in ret]
+            cnt = len(questions)
+            if cnt == 0:
+                abort(404)
+
+            res = {
+                'success': 'true',
+                'data': questions,
+                'total_count': cnt
+            }
+            return jsonify(res), 200
+        except Exception as err:
+            print(err)
+            abort(err.code)
 
     '''
     @TODO: 
@@ -122,16 +143,17 @@ def create_app(test_config=None):
     Create error handlers for all expected errors 
     including 404 and 422. 
     '''
+    @app.errorhandler(404)
+    def not_found(err):
+        return jsonify({'success': False, 'message': 'not found', 'data': [], 'total_count': 0}), 404
+
+    @app.errorhandler(422)
+    def unprocessable(err):
+        return jsonify({'success': False, 'message': 'unprocessable'}), 422
+
     @app.errorhandler(500)
     def internal_server_error(err):
         return jsonify({'success': False, 'message': err.name, 'detail': err.description}), err.code
 
-    @app.errorhandler(404)
-    def not_found():
-        return jsonify({'success': False, 'message': 'not found', 'data': [], 'total_count': 0}), 404
-
-    @app.errorhandler(422)
-    def unprocessable():
-        return jsonify({'success': False, 'message': 'unprocessable'}), 422
 
     return app

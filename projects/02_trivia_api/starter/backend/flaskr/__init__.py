@@ -96,9 +96,16 @@ def create_app(test_config=None):
     '''
     @app.route('/question/<question_id>', methods=['DELETE'])
     def delete_question(question_id):
-        print(question_id)
-        return jsonify({'success': 'true'}), 200
+        try:
+            q = Question.query.filter(Question.id == question_id).one_or_none()
+            if q is None:
+                abort(404)
 
+            q.delete()
+            print(question_id)
+            return jsonify({'success': 'true'}), 200
+        except Exception:
+            abort(422)
     '''
     @TODO: 
     Create an endpoint to POST a new question, 

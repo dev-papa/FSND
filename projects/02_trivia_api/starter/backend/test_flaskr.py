@@ -101,6 +101,17 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['total_count'])
         self.assertTrue(len(data))
 
+    def test_delete_question(self):
+        # Question for delete
+        try:
+            q = Question(question='q', answer='a', category=1, difficulty=2)
+            q.id = 30
+            q.insert()
+        except:
+            pass
+
+        res = self.client().delete('/question/30')
+        self.assertEqual(res.status_code, 200)
 
 # Make the tests conveniently executable
 if __name__ == "__main__":

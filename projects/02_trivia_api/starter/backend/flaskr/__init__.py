@@ -111,11 +111,34 @@ def create_app(test_config=None):
     Create an endpoint to POST a new question, 
     which will require the question and answer text, 
     category, and difficulty score.
-  
+    
     TEST: When you submit a question on the "Add" tab, 
     the form will clear and the question will appear at the end of the last page
     of the questions list in the "List" tab.  
     '''
+    @app.route('/question', methods=['POST'])
+    def post_question():
+        try:
+            body = request.get_json()
+            question = body['question']
+            answer = body['answer']
+            category = body['category']
+            difficulty = body['difficulty']
+
+            print('post body')
+            print(question, answer, category, difficulty)
+            if question is None:
+                abort(422)
+
+            res = {
+                'success': True,
+                'data': None,
+                'total_count': 0
+            }
+            return jsonify(res), 200
+        except Exception:
+            abort(500)
+
 
     '''
     @TODO: 

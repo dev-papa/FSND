@@ -79,8 +79,9 @@ def create_app(test_config=None):
 
             res = {
                 'success': 'true',
-                'data': questions,
-                'total_count': cnt
+                'questions': questions,
+                'total_questions': cnt,
+                'categories': []
             }
             return jsonify(res), 200
         except Exception as err:

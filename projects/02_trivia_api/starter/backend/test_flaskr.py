@@ -115,7 +115,7 @@ class TriviaTestCase(unittest.TestCase):
 
     def test_post_question(self):
         body = {
-            'question': '',
+            'question': 'xxx',
             'answer': 'yyy',
             'category': 1,
             'difficulty': 2
@@ -126,7 +126,31 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['success'])
         self.assertTrue(data['total_count'])
-        self.assertTrue(len(data))
+        self.assertGreaterEqual(len(data), 0)
+
+    def test_get_questions_by_search_term(self):
+        res = self.client().get('/questions/search?t=Taj')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['success'])
+        self.assertTrue(data['total_count'])
+        self.assertGreaterEqual(len(data), 0)
+
+    def test_get_questions_by_category(self):
+        res = self.client().get('/questions/category/1')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['success'])
+        self.assertTrue(data['total_count'])
+        self.assertGreaterEqual(len(data), 0)
+
+    def test_play_questions(self):
+        res = self.client().post('/questions/play')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        # self.assertTrue(data['success'])
+        # self.assertTrue(data['total_count'])
+        # self.assertGreaterEqual(len(data), 0)
 
 
 # Make the tests conveniently executable

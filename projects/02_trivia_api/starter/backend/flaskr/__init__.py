@@ -90,7 +90,7 @@ def create_app(test_config=None):
     '''
     @TODO: 
     Create an endpoint to DELETE question using a question ID. 
-  
+    
     TEST: When you click the trash icon next to a question, the question will be removed.
     This removal will persist in the database and when you refresh the page. 
     '''
@@ -130,10 +130,16 @@ def create_app(test_config=None):
             if question is None:
                 abort(422)
 
+            q: Question = Question(question=question, answer=answer, category=category, difficulty=difficulty)
+            qid = q.insert()
+            ret: Question = Question.query.order_by(Question.id).offset(0).limit(10).all()
+            questions = [q.format() for q in ret]
+
             res = {
                 'success': True,
-                'data': None,
-                'total_count': 0
+                'id': qid,
+                'data': questions,
+                'total_count': len(questions)
             }
             return jsonify(res), 200
         except Exception:
@@ -150,6 +156,32 @@ def create_app(test_config=None):
     only question that include that string within their question. 
     Try using the word "title" to start. 
     '''
+    @app.route('/questions/search', methods=['GET'])
+    def get_questions_by_term():
+        try:
+            search_term = request.args.get('t')
+            print(search_term)
+
+            search_results: Question = Question.query.filter(Question.question.like(f'%{search_term}%')).all()
+            search_results = [search_result.format() for search_result in search_results]
+            print(search_results)
+            # search_result = {
+            #     'question': '',
+            #     'answer': '',
+            #     'category': 1,
+            #     'difficulty': 2
+            # }
+
+            ret = {
+                'success': True,
+                'data': search_results,
+                'total_count': len(search_results)
+            }
+            return jsonify(ret), 200
+        except Exception as e:
+            print(e)
+            abort(500)
+
 
     '''
     @TODO: 
@@ -159,6 +191,24 @@ def create_app(test_config=None):
     categories in the left column will cause only questions of that 
     category to be shown. 
     '''
+    @app.route('/questions/category/<cat_id>', methods=['GET'])
+    def get_questions_by_category(cat_id):
+        try:
+            search_results = Question.query.filter(
+                Question.category == cat_id
+            ).order_by(Question.id).all()
+            search_results = [sr.format() for sr in search_results]
+            print(search_results)
+            ret = {
+                'success': True,
+                'data': search_results,
+                'total_count': len(search_results)
+            }
+            return jsonify(ret), 200
+        except Exception as e:
+            print(e)
+            abort(500)
+
 
     '''
     @TODO: 
@@ -171,6 +221,18 @@ def create_app(test_config=None):
     one question at a time is displayed, the user is allowed to answer
     and shown whether they were correct or not. 
     '''
+    @app.route('/questions/play', methods=['POST'])
+    def play():
+        try:
+
+            ret = {
+                'success': True,
+            }
+            return jsonify(ret), 200
+        except Exception as e:
+            print(e)
+            abort(500)
+
 
     '''
     @TODO: 

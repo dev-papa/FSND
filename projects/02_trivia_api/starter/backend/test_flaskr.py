@@ -52,7 +52,7 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['success'])
-        self.assertTrue(data['total_count'])
+        self.assertTrue(data['total_questions'])
         self.assertTrue(len(data))
 
     def test_get_questions_with_pagination(self):
@@ -61,7 +61,7 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['success'])
-        self.assertTrue(data['total_count'])
+        self.assertTrue(data['total_questions'])
         self.assertTrue(len(data))
 
     def test_get_questions_with_no_page(self):
@@ -70,7 +70,7 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 404)
         self.assertFalse(data['success'])
-        self.assertEqual(data['total_count'], 0)
+        self.assertEqual(data['total_questions'], 0)
         self.assertTrue(len(data))
 
     def test_get_questions_with_invalid_pagination0(self):
@@ -79,7 +79,7 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['success'])
-        self.assertTrue(data['total_count'])
+        self.assertTrue(data['total_questions'])
         self.assertTrue(len(data))
 
     def test_get_questions_with_negative_pagination(self):
@@ -88,7 +88,7 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['success'])
-        self.assertTrue(data['total_count'])
+        self.assertTrue(data['total_questions'])
         self.assertTrue(len(data))
 
 
@@ -98,7 +98,7 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['success'])
-        self.assertTrue(data['total_count'])
+        self.assertTrue(data['total_questions'])
         self.assertTrue(len(data))
 
     def test_delete_question(self):
@@ -125,7 +125,7 @@ class TriviaTestCase(unittest.TestCase):
         print(data)
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['success'])
-        self.assertTrue(data['total_count'])
+        self.assertTrue(data['total_questions'])
         self.assertGreaterEqual(len(data), 0)
 
     def test_get_questions_by_search_term(self):
@@ -133,7 +133,7 @@ class TriviaTestCase(unittest.TestCase):
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['success'])
-        self.assertTrue(data['total_count'])
+        self.assertTrue(data['total_questions'])
         self.assertGreaterEqual(len(data), 0)
 
     def test_get_questions_by_category(self):
@@ -141,7 +141,7 @@ class TriviaTestCase(unittest.TestCase):
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['success'])
-        self.assertTrue(data['total_count'])
+        self.assertTrue(data['total_questions'])
         self.assertGreaterEqual(len(data), 0)
 
     def test_play_questions(self):
@@ -149,7 +149,7 @@ class TriviaTestCase(unittest.TestCase):
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         # self.assertTrue(data['success'])
-        # self.assertTrue(data['total_count'])
+        # self.assertTrue(data['total_questions'])
         # self.assertGreaterEqual(len(data), 0)
 
 

@@ -46,7 +46,7 @@ def create_app(test_config=None):
 
             res = ({
                 'success': True,
-                'data': categories,
+                'categories': categories,
                 'total_count': cnt
             })
             return jsonify(res), 200
@@ -108,7 +108,8 @@ def create_app(test_config=None):
             # 'books' and 'total_books'
             # Response body keys: 'success', 'books' and 'total_books'
             return jsonify({'success': 'true'}), 200
-        except Exception:
+        except Exception as e:
+            print(e)
             abort(422)
     '''
     @TODO: 
@@ -143,7 +144,7 @@ def create_app(test_config=None):
                 'success': True,
                 'id': qid,
                 'data': questions,
-                'total_count': len(questions)
+                'total_questions': len(questions)
             }
             return jsonify(res), 200
         except Exception:
@@ -179,7 +180,7 @@ def create_app(test_config=None):
             ret = {
                 'success': True,
                 'data': search_results,
-                'total_count': len(search_results)
+                'total_questions': len(search_results)
             }
             return jsonify(ret), 200
         except Exception as e:
@@ -206,7 +207,7 @@ def create_app(test_config=None):
             ret = {
                 'success': True,
                 'data': search_results,
-                'total_count': len(search_results)
+                'total_questions': len(search_results)
             }
             return jsonify(ret), 200
         except Exception as e:
@@ -245,7 +246,7 @@ def create_app(test_config=None):
     '''
     @app.errorhandler(404)
     def not_found(err):
-        return jsonify({'success': False, 'message': 'not found', 'data': [], 'total_count': 0}), 404
+        return jsonify({'success': False, 'message': 'not found', 'data': [], 'total_questions': 0}), 404
 
     @app.errorhandler(422)
     def unprocessable(err):

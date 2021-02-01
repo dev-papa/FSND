@@ -104,6 +104,9 @@ def create_app(test_config=None):
 
             q.delete()
             print(question_id)
+            # Response body keys: 'success', 'deleted'(id of deleted book),
+            # 'books' and 'total_books'
+            # Response body keys: 'success', 'books' and 'total_books'
             return jsonify({'success': 'true'}), 200
         except Exception:
             abort(422)

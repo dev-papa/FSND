@@ -11,7 +11,7 @@ class FormView extends Component {
       answer: "",
       difficulty: 1,
       category: 1,
-      categories: {}
+      categories: []
     }
   }
 
@@ -20,7 +20,9 @@ class FormView extends Component {
       url: `/categories`, //TODO: update request URL
       type: "GET",
       success: (result) => {
-        this.setState({ categories: result.categories })
+        console.log(result.categories)
+        // this.setState({ categories: result.categories })
+        this.setState({ categories: ['xxx', 'yyy'] }) // TODO
         return;
       },
       error: (error) => {

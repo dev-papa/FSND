@@ -6,7 +6,7 @@ import random
 
 from models import setup_db, Question, Category
 
-QUESTIONS_PER_PAGE = 10
+QUESTIONS_PER_PAGE = 2
 
 
 def create_app(test_config=None):
@@ -65,24 +65,29 @@ def create_app(test_config=None):
     Clicking on the page numbers should update the questions. 
     '''
     @app.route('/questions', methods=['GET'])
-    def get_queries():
+    def get_questions():
         try:
             page = request.args.get('page', 1, type=int)
             if page is None or page <= 0:
                 page = 1
             offset_start = (page - 1) * QUESTIONS_PER_PAGE
             q = Question.query
-            ret: Question = q.order_by(Question.id).offset(offset_start).limit(2).all()
+            ret: Question = q.order_by(Question.id).offset(offset_start).limit(QUESTIONS_PER_PAGE).all()
             questions = [q.format() for q in ret]
             cnt = q.count()
             if cnt == 0:
                 abort(404)
 
+
+            cat: Category = Category.query.all()
+            print(cat)
+            categories = {c.id: c.type for c in cat}
+            print(categories)
             res = {
                 'success': 'true',
                 'questions': questions,
                 'total_questions': cnt,
-                'categories': []
+                'categories': categories
             }
             return jsonify(res), 200
         except Exception as err:
@@ -99,16 +104,26 @@ def create_app(test_config=None):
     @app.route('/questions/<question_id>', methods=['DELETE'])
     def delete_question(question_id):
         try:
-            q = Question.query.filter(Question.id == question_id).one_or_none()
-            if q is None:
+            q = Question.query
+            target = q.filter(Question.id == question_id).one_or_none()
+            if target is None:
                 abort(404)
 
-            q.delete()
+            target.delete()
             print(question_id)
+            cnt = q.count()
+            qr: Question = q.order_by(Question.id).offset(0).limit(QUESTIONS_PER_PAGE).all()
+            questions = [q.format() for q in qr]
             # Response body keys: 'success', 'deleted'(id of deleted book),
             # 'books' and 'total_books'
             # Response body keys: 'success', 'books' and 'total_books'
-            return jsonify({'success': 'true'}), 200
+            ret = {
+                'success': 'true',
+                'deleted': question_id,
+                'total_questions': cnt,
+                'questions': questions
+            }
+            return jsonify(ret), 200
         except Exception as e:
             print(e)
             abort(422)
@@ -138,7 +153,7 @@ def create_app(test_config=None):
 
             q: Question = Question(question=question, answer=answer, category=category, difficulty=difficulty)
             qid = q.insert()
-            ret: Question = Question.query.order_by(Question.id).offset(0).limit(10).all()
+            ret: Question = Question.query.order_by(Question.id).offset(0).limit(QUESTIONS_PER_PAGE).all()
             questions = [q.format() for q in ret]
 
             res = {
@@ -167,8 +182,8 @@ def create_app(test_config=None):
         try:
             search_term = request.args.get('t')
             print(search_term)
-            q = Question.query
-            search_results: Question = q.filter(Question.question.like(f'%{search_term}%')).all()
+            q = Question.query.filter(Question.question.like(f'%{search_term}%'))
+            search_results: Question = q.all()
             search_results = [search_result.format() for search_result in search_results]
             cnt = q.count()
             print(search_results, cnt)

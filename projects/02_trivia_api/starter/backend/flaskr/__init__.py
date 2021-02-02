@@ -167,10 +167,11 @@ def create_app(test_config=None):
         try:
             search_term = request.args.get('t')
             print(search_term)
-
-            search_results: Question = Question.query.filter(Question.question.like(f'%{search_term}%')).all()
+            q = Question.query
+            search_results: Question = q.filter(Question.question.like(f'%{search_term}%')).all()
             search_results = [search_result.format() for search_result in search_results]
-            print(search_results)
+            cnt = q.count()
+            print(search_results, cnt)
             # search_result = {
             #     'question': '',
             #     'answer': '',
@@ -180,8 +181,8 @@ def create_app(test_config=None):
 
             ret = {
                 'success': True,
-                'data': search_results,
-                'total_questions': len(search_results)
+                'questions': search_results,
+                'total_questions': cnt
             }
             return jsonify(ret), 200
         except Exception as e:

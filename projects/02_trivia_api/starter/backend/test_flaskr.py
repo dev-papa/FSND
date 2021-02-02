@@ -134,7 +134,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['success'])
         self.assertTrue(data['total_questions'])
-        self.assertGreaterEqual(len(data), 0)
+        self.assertGreaterEqual(data['total_questions'], 0)
 
     def test_get_questions_by_category(self):
         res = self.client().get('/questions/category/1')

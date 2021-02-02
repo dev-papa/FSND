@@ -47,7 +47,7 @@ class QuestionView extends Component {
 
   createPagination(){
     let pageNumbers = [];
-    let maxPage = Math.ceil(this.state.totalQuestions / 10)
+    let maxPage = Math.ceil(this.state.totalQuestions / 2)
     for (let i = 1; i <= maxPage; i++) {
       pageNumbers.push(
         <span
@@ -79,8 +79,8 @@ class QuestionView extends Component {
 
   submitSearch = (searchTerm) => {
     $.ajax({
-      url: `/questions`, //TODO: update request URL
-      type: "POST",
+      url: `/questions/search?t=${searchTerm}`, //TODO: update request URL
+      type: "GET",
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify({searchTerm: searchTerm}),
@@ -124,7 +124,7 @@ class QuestionView extends Component {
     return (
       <div className="question-view">
         <div className="categories-list">
-          <h2 onClick={() => {this.getQuestions()}}>Categories</h2>
+          <h2 onClick={(e) => {this.getQuestions()}}>Categories</h2>
           <ul>
             {Object.keys(this.state.categories).map((id, ) => (
               <li key={id} onClick={() => {this.getByCategory(id)}}>

@@ -25,7 +25,9 @@ class QuizView extends Component {
       url: `/categories`, //TODO: update request URL
       type: "GET",
       success: (result) => {
-        this.setState({ categories: result.categories })
+        console.log(result)
+          const categories = result.categories.map(c => c.type)
+        this.setState({ categories: categories })
         return;
       },
       error: (error) => {

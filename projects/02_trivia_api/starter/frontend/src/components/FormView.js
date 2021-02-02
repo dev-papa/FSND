@@ -21,8 +21,9 @@ class FormView extends Component {
       type: "GET",
       success: (result) => {
         console.log(result.categories)
-        // this.setState({ categories: result.categories })
-        this.setState({ categories: ['xxx', 'yyy'] }) // TODO
+        const categories = result.categories.map(c => c.type)
+        this.setState({ categories: categories })
+        // this.setState({ categories: ['xxx', 'yyy'] }) // TODO
         return;
       },
       error: (error) => {
@@ -44,7 +45,7 @@ class FormView extends Component {
         question: this.state.question,
         answer: this.state.answer,
         difficulty: this.state.difficulty,
-        category: this.state.category
+        category: Number(this.state.category) + 1
       }),
       xhrFields: {
         withCredentials: true
@@ -52,6 +53,7 @@ class FormView extends Component {
       crossDomain: true,
       success: (result) => {
         document.getElementById("add-question-form").reset();
+        alert('Question added!')
         return;
       },
       error: (error) => {

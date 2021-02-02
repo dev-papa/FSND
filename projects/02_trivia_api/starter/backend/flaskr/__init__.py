@@ -213,7 +213,7 @@ def create_app(test_config=None):
     categories in the left column will cause only questions of that 
     category to be shown. 
     '''
-    @app.route('/questions/category/<cat_id>', methods=['GET'])
+    @app.route('/categories/<cat_id>/questions', methods=['GET'])
     def get_questions_by_category(cat_id):
         try:
             search_results = Question.query.filter(
@@ -223,7 +223,7 @@ def create_app(test_config=None):
             print(search_results)
             ret = {
                 'success': True,
-                'data': search_results,
+                'questions': search_results,
                 'total_questions': len(search_results)
             }
             return jsonify(ret), 200

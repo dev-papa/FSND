@@ -110,7 +110,7 @@ class TriviaTestCase(unittest.TestCase):
         except:
             pass
 
-        res = self.client().delete('/question/30')
+        res = self.client().delete('/questions/30')
         self.assertEqual(res.status_code, 200)
 
     def test_post_question(self):

@@ -71,9 +71,10 @@ def create_app(test_config=None):
             if page is None or page <= 0:
                 page = 1
             offset_start = (page - 1) * QUESTIONS_PER_PAGE
-            ret: Question = Question.query.order_by(Question.id).offset(offset_start).limit(10).all()
+            q = Question.query
+            ret: Question = q.order_by(Question.id).offset(offset_start).limit(2).all()
             questions = [q.format() for q in ret]
-            cnt = len(questions)
+            cnt = q.count()
             if cnt == 0:
                 abort(404)
 

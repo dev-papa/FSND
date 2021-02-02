@@ -120,7 +120,7 @@ class TriviaTestCase(unittest.TestCase):
             'category': 1,
             'difficulty': 2
         }
-        res = self.client().post('/question', json=body)
+        res = self.client().post('/questions', json=body)
         data = json.loads(res.data)
         print(data)
         self.assertEqual(res.status_code, 200)

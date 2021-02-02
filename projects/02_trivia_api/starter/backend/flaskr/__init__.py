@@ -6,7 +6,7 @@ import random
 
 from models import setup_db, Question, Category
 
-QUESTIONS_PER_PAGE = 2
+QUESTIONS_PER_PAGE = 10
 
 
 def create_app(test_config=None):
@@ -137,7 +137,7 @@ def create_app(test_config=None):
     the form will clear and the question will appear at the end of the last page
     of the questions list in the "List" tab.  
     '''
-    @app.route('/question', methods=['POST'])
+    @app.route('/questions', methods=['POST'])
     def post_question():
         try:
             body = request.get_json()
@@ -216,15 +216,21 @@ def create_app(test_config=None):
     @app.route('/categories/<cat_id>/questions', methods=['GET'])
     def get_questions_by_category(cat_id):
         try:
-            search_results = Question.query.filter(
+            page = request.args.get('page', 1, type=int)
+            if page is None or page <= 0:
+                page = 1
+            offset_start = (page - 1) * QUESTIONS_PER_PAGE
+            q = Question.query.filter(
                 Question.category == cat_id
-            ).order_by(Question.id).all()
+            )
+            search_results = q.order_by(Question.id).offset(offset_start).limit(QUESTIONS_PER_PAGE).all()
             search_results = [sr.format() for sr in search_results]
             print(search_results)
+            cnt = q.count()
             ret = {
                 'success': True,
                 'questions': search_results,
-                'total_questions': len(search_results)
+                'total_questions': cnt
             }
             return jsonify(ret), 200
         except Exception as e:

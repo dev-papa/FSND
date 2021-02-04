@@ -252,14 +252,36 @@ def create_app(test_config=None):
     @app.route('/quizzes', methods=['POST'])
     def play():
         try:
+            data = request.get_json()
+            print(data)
+            category = data['quiz_category']
+            print(f'category: {category}')
+            previous_questions = data['previous_questions']
+            print(previous_questions)
+            print(len(previous_questions))
+            db_query = Question.query
+            if len(previous_questions) > 0:
+                db_query = db_query.filter(Question.id.notin_(data['previous_questions']))
+            if category['type'] != 'click':
+                db_query = db_query.filter(Question.category == int(category['id']) + 1)
+            # else:
+            #     questions: Question = q.all()
+            questions = db_query.all()
 
+            if len(questions) == 0:
+                abort(404)
+            n = random.randint(0, len(questions) - 1)
+            print(f'rand: {n}, len of q: {len(questions)}')
+            question = questions[n].format()
+            print(question)
             ret = {
                 'success': True,
+                'question': question
             }
             return jsonify(ret), 200
-        except Exception as e:
-            print(e)
-            abort(500)
+        except Exception as err:
+            print(err)
+            abort(err.code)
 
 
     '''

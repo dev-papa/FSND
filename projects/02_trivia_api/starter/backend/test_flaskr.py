@@ -152,6 +152,18 @@ class TriviaTestCase(unittest.TestCase):
         # self.assertTrue(data['total_questions'])
         # self.assertGreaterEqual(len(data), 0)
 
+    def test_quizzes(self):
+        body = {
+            'previous_questions': [],
+            'quiz_category': {'id': 0, 'type': 'click'}
+        }
+        res = self.client().post('/quizzes', json=body)
+        data = json.loads(res.data)
+        print(data)
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['success'])
+        self.assertGreaterEqual(len(data['question']), 0)
+
 
 # Make the tests conveniently executable
 if __name__ == "__main__":

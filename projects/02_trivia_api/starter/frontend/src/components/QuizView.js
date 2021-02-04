@@ -48,7 +48,7 @@ class QuizView extends Component {
   getNextQuestion = () => {
     const previousQuestions = [...this.state.previousQuestions]
     if(this.state.currentQuestion.id) { previousQuestions.push(this.state.currentQuestion.id) }
-
+    console.log(previousQuestions, this.state.quizCategory)
     $.ajax({
       url: '/quizzes', //TODO: update request URL
       type: "POST",
@@ -73,6 +73,12 @@ class QuizView extends Component {
         return;
       },
       error: (error) => {
+        if (error.status === 404) {
+          alert('no more questions.')
+          return;
+        }
+      // error: (error) => {
+      //     console.log(error.status)
         alert('Unable to load question. Please try your request again')
         return;
       }
@@ -152,6 +158,7 @@ class QuizView extends Component {
   }
 
   renderPlay(){
+      console.log(this.state.currentQuestion)
     return this.state.previousQuestions.length === questionsPerPlay || this.state.forceEnd
       ? this.renderFinalScore()
       : this.state.showAnswer 

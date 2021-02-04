@@ -98,3 +98,139 @@ createdb trivia_test
 psql trivia_test < trivia.psql
 python test_flaskr.py
 ```
+
+---
+
+## Endpoints 
+
+### `GET` '/categories'
+- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
+- Request Arguments: `None`
+- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
+```
+{'1' : "Science",
+'2' : "Art",
+'3' : "Geography",
+'4' : "History",
+'5' : "Entertainment",
+'6' : "Sports"}
+```
+
+### `GET` '/questions'
+- Fetches question with pagination.
+#### Request Arguments  
+Param|Sample|Type|Description
+---|---|---|---
+page  |  1|  int| page number for display
+#### Returns
+```
+{
+    "categories": {
+        "1": "Science",
+        "2": "Art",
+        "3": "Geography",
+        "4": "History",
+        "5": "Entertainment",
+        "6": "Sports"
+    },
+    "questions": [
+        {
+            "answer": "Maya Angelou",
+            "category": 4,
+            "difficulty": 2,
+            "id": 5,
+            "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+        }, ...
+    ],
+    "success": "true",
+    "total_questions": 22
+}
+```
+
+### `DELETE` '/questions/<question_id>'
+- Delete specified question from database
+#### Params
+Param|Sample|Type|Description
+---|---|---|---
+question_id  |  1|  int|question id 
+#### Request Arguments
+`None`
+#### Returns
+```
+{
+    "deleted": "5",
+    "questions": [
+        {
+            "answer": "Edward Scissorhands",
+            "category": 5,
+            "difficulty": 3,
+            "id": 6,
+            "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+        }, ...
+    ],
+    "success": "true",
+    "total_questions": 21
+}
+```
+### `POST` '/questions'
+- Add question
+#### Post Parameters
+Param|Sample|Type|Description
+---|---|---|---
+question  |  'sample question'|  string|question script 
+answer  |  'sample answer'|  string| question answer
+category  |  1|  int| category for question which is in category table
+difficulty  |  1|  int| difficulty for question from 1 through 5 
+#### Returns
+```
+{
+    "data": [ // TODO questions??
+        {
+            "answer": "Edward Scissorhands",
+            "category": 5,
+            "difficulty": 3,
+            "id": 6,
+            "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+        }, ...
+    ],
+    "id": null,
+    "success": true,
+    "total_questions": 10 // TODO 10??
+}
+```
+### `GET` '/questions/search'
+- Explanation
+#### Request Arguments
+Param|Sample|Type|Description
+---|---|---|---
+a  |  a|  a| a
+#### Returns
+```
+{
+
+}
+```
+### `GET` '/categories/<cat_id>/questions'
+- Explanation
+#### Request Arguments
+Param|Sample|Type|Description
+---|---|---|---
+a  |  a|  a| a
+#### Returns
+```
+{
+
+}
+```
+### `POST` '/quizzes'
+- Explanation
+#### -Request Arguments
+Param|Sample|Type|Description
+---|---|---|---
+a  |  a|  a| a
+#### Returns
+```
+{
+
+}
+```

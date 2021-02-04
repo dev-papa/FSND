@@ -23,7 +23,6 @@ class FormView extends Component {
         console.log(result.categories)
         const categories = result.categories.map(c => c.type)
         this.setState({ categories: categories })
-        // this.setState({ categories: ['xxx', 'yyy'] }) // TODO
         return;
       },
       error: (error) => {

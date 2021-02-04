@@ -177,7 +177,7 @@ def create_app(test_config=None):
     only question that include that string within their question. 
     Try using the word "title" to start. 
     '''
-    @app.route('/questions/search', methods=['GET'])
+    @app.route('/questions/search', methods=['GET'])  # I believe "GET" is suitable for search
     def get_questions_by_term():
         try:
             search_term = request.args.get('t')

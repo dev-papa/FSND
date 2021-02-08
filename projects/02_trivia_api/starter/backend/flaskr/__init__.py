@@ -152,13 +152,13 @@ def create_app(test_config=None):
                 abort(422)
 
             q: Question = Question(question=question, answer=answer, category=category, difficulty=difficulty)
-            qid = q.insert()
+            q.insert()
             ret: Question = Question.query.order_by(Question.id).offset(0).limit(QUESTIONS_PER_PAGE).all()
             questions = [q.format() for q in ret]
 
             res = {
                 'success': True,
-                'id': qid,
+                'id': q.id,
                 'data': questions,
                 'total_questions': len(questions)
             }

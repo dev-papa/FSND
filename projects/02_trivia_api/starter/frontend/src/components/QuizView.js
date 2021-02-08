@@ -74,7 +74,14 @@ class QuizView extends Component {
       },
       error: (error) => {
         if (error.status === 404) {
-          alert('no more questions.')
+          this.setState({
+            showAnswer: false,
+            previousQuestions: previousQuestions,
+            currentQuestion: "",
+            guess: '',
+            forceEnd: true
+          })
+          // alert('no more questions.')
           return;
         }
       // error: (error) => {

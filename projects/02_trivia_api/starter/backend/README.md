@@ -199,38 +199,92 @@ difficulty  |  1|  int| difficulty for question from 1 through 5
 }
 ```
 ### `GET` '/questions/search'
-- Explanation
+- Search questions by questions text with wildcard. 
 #### Request Arguments
 Param|Sample|Type|Description
 ---|---|---|---
-a  |  a|  a| a
+t  | soccer|  string|string for search 
 #### Returns
 ```
 {
-
+    "questions": [
+        {
+            "answer": "Brazil",
+            "category": 6,
+            "difficulty": 3,
+            "id": 10,
+            "question": "Which is the only team to play in every soccer World Cup tournament?"
+        },
+        {
+            "answer": "Uruguay",
+            "category": 6,
+            "difficulty": 4,
+            "id": 11,
+            "question": "Which country won the first ever soccer World Cup in 1930?"
+        }
+    ],
+    "success": true,
+    "total_questions": 2
 }
 ```
 ### `GET` '/categories/<cat_id>/questions'
-- Explanation
+- Search questions by category.
 #### Request Arguments
-Param|Sample|Type|Description
----|---|---|---
-a  |  a|  a| a
+`None`
 #### Returns
 ```
 {
-
+    "questions": [
+        {
+            "answer": "The Liver",
+            "category": 1,
+            "difficulty": 4,
+            "id": 20,
+            "question": "What is the heaviest organ in the human body?"
+        },
+        {
+            "answer": "sample answer",
+            "category": 1,
+            "difficulty": 1,
+            "id": 32,
+            "question": "sample question"
+        }
+    ],
+    "success": true,
+    "total_questions": 2
 }
 ```
 ### `POST` '/quizzes'
-- Explanation
-#### -Request Arguments
+- Add quiz
+#### -Request Arguments (json)
 Param|Sample|Type|Description
 ---|---|---|---
-a  |  a|  a| a
+question  |  some question|  string| question description
+answer  |  some answer|  string| answer for a question
+difficulty |  5|  int| difficulty for a question
+category  |  1|  int|category for a question 
 #### Returns
 ```
 {
-
+    "data": [
+        {
+            "answer": "Edward Scissorhands",
+            "category": 5,
+            "difficulty": 3,
+            "id": 6,
+            "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+        },
+        ...
+        {
+            "answer": "Mona Lisa",
+            "category": 2,
+            "difficulty": 3,
+            "id": 17,
+            "question": "La Giaconda is better known as what?"
+        }
+    ],
+    "id": 34,
+    "success": true,
+    "total_questions": 10
 }
 ```

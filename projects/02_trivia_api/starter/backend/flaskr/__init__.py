@@ -182,7 +182,7 @@ def create_app(test_config=None):
         try:
             search_term = request.args.get('t')
             print(search_term)
-            q = Question.query.filter(Question.question.like(f'%{search_term}%'))
+            q = Question.query.filter(Question.question.ilike(f'%{search_term}%'))
             search_results: Question = q.all()
             search_results = [search_result.format() for search_result in search_results]
             cnt = q.count()

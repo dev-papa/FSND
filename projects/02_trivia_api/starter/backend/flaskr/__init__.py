@@ -12,7 +12,22 @@ QUESTIONS_PER_PAGE = 10
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
-    setup_db(app)
+    if test_config is None:
+        # database_name = "trivia"
+        # database_path = "postgresql://{}/{}".format('postgres:admin@localhost:5432', database_name)
+        db_name = os.getenv('DB_NAME')
+        db_user = os.getenv('DB_USER')
+        db_pw = os.getenv('DB_PASSWORD')
+        db_host = os.getenv('DB_HOST')
+        db_port = os.getenv('DB_PORT')
+    else:
+        db_name = os.getenv('DB_NAME_TEST')
+        db_user = os.getenv('DB_USER_TEST')
+        db_pw = os.getenv('DB_PASSWORD_TEST')
+        db_host = os.getenv('DB_HOST_TEST')
+        db_port = os.getenv('DB_PORT_TEST')
+    database_path = "postgresql://{}/{}".format(f'{db_user}:{db_pw}@{db_host}:{db_port}', db_name)
+    setup_db(app, database_path)
     '''
     done @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
     '''
@@ -74,7 +89,7 @@ def create_app(test_config=None):
             q = Question.query
             ret: Question = q.order_by(Question.id).offset(offset_start).limit(QUESTIONS_PER_PAGE).all()
             questions = [q.format() for q in ret]
-            cnt = q.count()
+            cnt = len(ret)
             if cnt == 0:
                 abort(404)
 

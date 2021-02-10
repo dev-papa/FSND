@@ -14,10 +14,10 @@ class TriviaTestCase(unittest.TestCase):
 
     def setUp(self):
         """Define test variables and initialize app."""
-        self.app = create_app()
-        self.client = self.app.test_client
         self.database_name = "trivia_test"
         self.database_path = "postgresql://{}/{}".format('postgres:admin@localhost:5432', self.database_name)
+        self.app = create_app(self)
+        self.client = self.app.test_client
         setup_db(self.app, self.database_path)
 
         # binds the app to the current context
@@ -67,7 +67,7 @@ class TriviaTestCase(unittest.TestCase):
     def test_get_questions_with_no_page(self):
         res = self.client().get('/questions?page=1000')
         data = json.loads(res.data)
-
+        print(res.status_code)
         self.assertEqual(res.status_code, 404)
         self.assertFalse(data['success'])
         self.assertEqual(data['total_questions'], 0)
@@ -143,14 +143,6 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['success'])
         self.assertTrue(data['total_questions'])
         self.assertGreaterEqual(len(data), 0)
-
-    def test_play_questions(self):
-        res = self.client().post('/questions/play')
-        data = json.loads(res.data)
-        self.assertEqual(res.status_code, 200)
-        # self.assertTrue(data['success'])
-        # self.assertTrue(data['total_questions'])
-        # self.assertGreaterEqual(len(data), 0)
 
     def test_quizzes(self):
         body = {
